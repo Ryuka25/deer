@@ -1,106 +1,147 @@
 #!/usr/bin/env python
 
-print("""
- ____         __    ____            
+import os
+
+class _programms():
+
+    def __init__(self) -> None:
+        self.prompt = "De</>er"
+        self.tips = "[?] type help() to display an help interface !"
+        self.version = "v0.1"
+        self.banner = """
+____         __    ____            
 |  _ \  ___  / /   / /\ \  ___ _ __ 
 | | | |/ _ \/ /   / /  \ \/ _ \ '__|
 | |_| |  __/\ \  / /   / /  __/ |   
 |____/ \___| \_\/_/   /_/ \___|_|   
                 
                 - by Ryuka Copyright 2021
-""")
-print("\tDe</>er allow user to decode or encode string!\n")
 
-alphabet = "abcdefghijklmnopqrstuvwxyz"
-key  = 12
+\tDe</>er allow user to decode or encode string!
+"""
+        self.help = """
+De</>er allow you to de</>er your string !
 
-def changeKey():
-    while True:
-        try:
-            global key
-            key  = int(input("[?] Enter a number of chiffrement : "))
-            if (key < 0):
-                pass
-            else:
-                print("[*] Success ... Key number has been changed !")
-                break
-        except:
-            print("[ERROR] Please enter a valid number")
+[?] Who to use ?
+    Type your string after the input prompt
+[!] Typing on the following word will return action:
+    quit :
+        - This will quit the programs
+    help :
+        - This will display this helps
+    version:
+        - This will display the programms version
+    changeKey: 
+        - This will prompt you an interface to changing key
+"""
 
-def encodeChar(char):
+    def showBanner(self):
+        print(self.banner)
+
+    def showVersion(self):
+        print(self.version)
+
+    def showHelp(self):
+        print(self.help)
     
-    if (char in alphabet): 
-        decodedIndex = alphabet.index(char) 
-        encodedIndex = (decodedIndex + key) % 26    
+    def showTips(self):
+        print(self.tips)
 
-        return alphabet[encodedIndex]
-    else:
-        return char 
+class _deer():
 
-def encodeString():
-    encode = True
-    while encode:
-        encodedString = ""
-        print('[?] Please enter the strings you want to encode !')
-        decodedString = str(input(' [menu/encoder] > '))
-    
-        if (decodedString == "99"):
-            encode = False
-        else:
-            for char in decodedString:
-                encodedString = encodedString + encodeChar(char)
-            print(f'[*] The encoded string is : "{encodedString}"\n')
+    alphabet =  "abcdefghijklmnopqrstuvwxyz"
+        
+    def __init__(self, key=12) -> None:
+        self.changeKey(key)
 
-def decodeChar(char):
+    def changeKey(self,key) -> None:
+        " Change the key encryption of the current De</>er session "
+        if (key == "kha"):
+            self.key = "kha"
+            self.deerAlphabet = "qbcedrtykuiopnlmafzgjvwxhs"
+        else: 
+            try:
+                int(key)                                                    # Test if the key is a type of int
+                print("[*] Key is <class 'int'>")
+                self.key = key
+                self.deerAlphabet = self.createCodedAlphabet(self.key)      # Create the alphabet correponding to the key
+            except:
+                print("[!] Key Not Found\nChoosing old key")
+        print("[*] New De</>er alphabet initialized.")
 
-    if (char in alphabet):
-        encodedIndex = alphabet.index(char)
-        decodedIndex = (encodedIndex - key) % 26
+    def showKey(self):
+        " View the current key "
+        print(f"[*] This is the current Key value = '{self.key}'")
+        print(f"[*] Normal Alphabet \t: {self.alphabet}")
+        print(f"[*] De</>er Alphabet\t: {self.deerAlphabet}")
 
-        return alphabet[decodedIndex]
-    else:
-        return char
+    def createCodedAlphabet(self, key:int) -> str:
+        " Create a De</>er alphabet with a key <class 'int'> "
+        result = ""
+        for i in range(26):
+            originalIndex = i                           # Handle the current index of the alphabet[i]
+            deerIndex = (originalIndex + key) % 26      # Handle the new index of the alphabet[i] in the deerAlphabet
+            result += self.alphabet[deerIndex]          # Construct the deerAlphabet
 
-def decodeString():
-    decode = True
-    while decode:
-        decodedString = ""
-        print('[?] Please enter the strings you want to decode !')
-        encodedString = str(input(' [menu/decoder] > '))
+        return result
 
-        if (encodedString == '99'):
-            decode = False
-        else:
-            for char in encodedString:
-                decodedString = decodedString + decodeChar(char)
-            print(f'[*] The decoded string is : "{decodedString}"\n')
+    def deerChar(self,char:str) -> str:
+        " De</>erring only a char "
+        char = char.lower()                     # Lowering the char to be supported by the codedAlphabet
+        result = char                           # Initialize the result in case that char is not in codedAlphabet
+        for i in range(26):
+            if char == self.deerAlphabet[i]:    # Find the index of the char in the codeAlphabet
+                result = self.alphabet[i]       # Result is the correpondant char with the same index in the alphabet
+        
+        return result
+
+    def deerStr(self,string:str) -> str:
+        " De</>erring a string"
+        result = "" 
+        self.initialString = string
+        for char in self.initialString:         # Iterate the string char
+            result += self.deerChar(char)       # Construct the deerString by deering char one by one
+
+        self.deeredString =  result
+
+    def showResult(self):
+        " Print the current De</>erring"
+        print(f'[*] "{self.initialString}" is De</>ered to "{self.deeredString}"\n')
 
 def main():
+    deerInterface = _programms()
+    dip = deerInterface.prompt
+
+    deerInterface.showBanner()
+    deerInterface.showTips()
+    
+    deer = _deer()
+
+    deer.showKey()
+
     run = True
-    print('[?] Enter what tools do you want to use from the bellows :\n\n\t1- Encoder\n\t2- Decoder\n\t3- Change the key\n\n\n\t99- Exit\n')
     while run:
-        choose = True
-        while choose:
-            try:
-                tool = str(input(' [menu] > '))
-                if (tool in {'1','2','3','99'}):
-                    break
-                else:
-                    print('[!] Please choose a valid number !')
-                    pass
-            except:
-                print('[!] Please choose a valid number !')
-                pass
-        if (tool == '99'):
+        userInput = str(input(f"[{dip}] > "))
+        if (userInput in ["quit", "exit"]):
             run = False
+            print("[!] If you leave , I'll be broken inside ...")
+        elif (userInput == "clear"):
+            cmd = "clear"
+            os.system(cmd)
+        elif (userInput == "help"):
+            deerInterface.showHelp()
+        elif (userInput == "version"):
+            deerInterface.showVersion
+        elif (userInput == "changeKey"):
+            newKey = input(f"[{dip} / changeKey] > ")
+            deer.changeKey(newKey)
+        elif (userInput == "showKey"):
+            deer.showKey()
         else:
-            print('[!] Input 99 to return to the menu !')
-            if (tool == '1'):
-                encodeString()
-            elif (tool == '3'):
-                changeKey()
-            elif (tool == '2'):
-                decodeString()
+            deer.initialString = userInput
+            deer.deerStr(userInput)
+            deer.showResult()
+        pass
 
 if (__name__ == '__main__'):
     main()
