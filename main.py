@@ -33,6 +33,8 @@ De</>er allow you to de</>er your string !
         - This will display the programms version
     changeKey: 
         - This will prompt you an interface to changing key
+    clear:
+        - This will clear the current subshell screen
 """
 
     def showBanner(self):
